@@ -23,9 +23,11 @@ BuildRequires: 		kdelibs-devel, qt3-devel, arts
 BuildRequires:		jpeg-devel, png-devel, kdebase-devel 
 Buildrequires:		arts-devel, libMesaGLU-devel
 BuildRequires:		libxxf86dga-devel, libxt-devel, libxv-devel
-Requires: 			arts, kdebase
-Requires:			%libname = %kdetv_epoch:%version-%release 
-Obsoletes:			kwintv
+Requires: 		arts
+# (nl)  maybe it should be better to only require kdebase-common
+Requires:               kdebase
+Requires:		%libname = %kdetv_epoch:%version-%release 
+Obsoletes:		kwintv
 
 
 %description
@@ -47,7 +49,7 @@ These libraries provide TV support to KDE.
 
 %package -n %{libname}-devel
 Summary:    kdevideo libraries
-Group:      System/Libraries
+Group:      Development/KDE and Qt
 Epoch:      %kdetv_epoch
 License:    LGPL
 Requires:   %libname = %{kdetv_epoch}:%version-%release

@@ -109,7 +109,7 @@ Name=KdeTv \$devicename
 Comment=Kdetv
 Exec=%_bindir/kdetv
 Terminal=false
-Icon=kdetv.png
+Icon=kdetv
 Type=Application
 EOF
 

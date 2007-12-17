@@ -13,7 +13,6 @@ Source: 		%name-%version.tar.bz2
 Group: 			Video
 License: 		GPL
 URL: 			http://www.kwintv.org/
-BuildRoot: 		%_tmppath/%name-%version
 Patch1:			kdetv-0.8.0-fix-install.patch
 Patch2:			kdetv-0.8.4-lib64.patch
 Patch3:			kdetv-0.8.7-simd.patch

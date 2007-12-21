@@ -114,6 +114,9 @@ mkdir -p %{buildroot}%{_datadir}/applications
 mv %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 desktop-file-install \
   --remove-key="Encoding" \
+  --remove-category="Multimedia" \
+  --remove-category="QT" \
+  --add-category="Qt" \
   --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
 
 %find_lang %{name} --with-html

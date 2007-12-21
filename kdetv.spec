@@ -111,7 +111,7 @@ Type=Application
 EOF
 
 mkdir -p %{_datadir}/applications
-mv %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop %{_datadir}/applications/%{name}.desktop
+mv %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 desktop-file-install \
   --remove-key="Encoding" \
   --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*

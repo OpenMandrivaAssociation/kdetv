@@ -110,7 +110,7 @@ Icon=kdetv
 Type=Application
 EOF
 
-mkdir -p %{_datadir}/applications
+mkdir -p %{buildroot}%{_datadir}/applications
 mv %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 desktop-file-install \
   --remove-key="Encoding" \

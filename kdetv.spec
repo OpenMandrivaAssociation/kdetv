@@ -155,7 +155,7 @@ fi
 
 %{_datadir}/apps/kdetv/*.rc
 
-%{_datadir}/applnk/Multimedia/kdetv.desktop
+%{_datadir}/applications/%{name}.desktop
 
 %dir %{_datadir}/apps/kdetv/channels-dist/
 %{_datadir}/apps/kdetv/channels-dist/*.list

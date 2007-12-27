@@ -9,7 +9,7 @@
 Summary: 		TV viewer for KDE
 Name: 			kdetv
 Version: 		0.8.9
-Release: 		%mkrel 4
+Release: 		%mkrel 5
 Source: 		%{name}-%{version}.tar.bz2
 Group: 			Video
 License: 		GPLv2+
@@ -110,14 +110,13 @@ Icon=kdetv
 Type=Application
 EOF
 
-mkdir -p %{buildroot}%{_datadir}/applications
-mv %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
-desktop-file-install \
+mkdir -p %{buildroot}%{_datadir}/applications/kde
+desktop-file-install --vendor='' --delete-original \
   --remove-key="Encoding" \
   --remove-category="Multimedia" \
   --remove-category="QT" \
   --add-category="Qt" \
-  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
+  --dir %{buildroot}%{_datadir}/applications/kde/ %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop
 
 %find_lang %{name} --with-html
 
@@ -155,7 +154,7 @@ fi
 
 %{_datadir}/apps/kdetv/*.rc
 
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/kde/%{name}.desktop
 
 %dir %{_datadir}/apps/kdetv/channels-dist/
 %{_datadir}/apps/kdetv/channels-dist/*.list
@@ -174,52 +173,6 @@ fi
 %{_datadir}/apps/kdetv/icons/hicolor/32x32/apps/*.png
 
 
-%dir %{_docdir}/HTML/da/kdetv
-%doc %{_docdir}/HTML/da/kdetv/common
-%doc %{_docdir}/HTML/da/kdetv/*.bz2
-%doc %{_docdir}/HTML/da/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/en/kdetv
-%doc %{_docdir}/HTML/en/kdetv/common
-%doc %{_docdir}/HTML/en/kdetv/*.bz2
-%doc %{_docdir}/HTML/en/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/et/kdetv
-%doc %{_docdir}/HTML/et/kdetv/common
-%doc %{_docdir}/HTML/et/kdetv/*.bz2
-%doc %{_docdir}/HTML/et/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/fr/kdetv
-%doc %{_docdir}/HTML/fr/kdetv/common
-%doc %{_docdir}/HTML/fr/kdetv/*.bz2
-%doc %{_docdir}/HTML/fr/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/it/kdetv
-%doc %{_docdir}/HTML/it/kdetv/common
-%doc %{_docdir}/HTML/it/kdetv/*.bz2
-%doc %{_docdir}/HTML/it/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/nl/kdetv
-%doc %{_docdir}/HTML/nl/kdetv/common
-%doc %{_docdir}/HTML/nl/kdetv/*.bz2
-%doc %{_docdir}/HTML/nl/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/pt/kdetv
-%doc %{_docdir}/HTML/pt/kdetv/common
-%doc %{_docdir}/HTML/pt/kdetv/*.bz2
-%doc %{_docdir}/HTML/pt/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/ru/kdetv
-%doc %{_docdir}/HTML/ru/kdetv/common
-%doc %{_docdir}/HTML/ru/kdetv/*.bz2
-%doc %{_docdir}/HTML/ru/kdetv/*.docbook
-
-%dir %{_docdir}/HTML/sv/kdetv
-%doc %{_docdir}/HTML/sv/kdetv/common
-%doc %{_docdir}/HTML/sv/kdetv/*.bz2
-%doc %{_docdir}/HTML/sv/kdetv/*.docbook
-
-
 %config(noreplace) %{launchers}/%{name}.desktop
 
 %files -n %{libname}
@@ -234,4 +187,3 @@ fi
 %files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/*.so
-

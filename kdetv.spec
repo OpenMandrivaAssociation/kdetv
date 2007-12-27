@@ -81,7 +81,7 @@ export LD_LIBRARY_PATH=$QTDIR/%{_lib}:$KDEDIR/%{_lib}:$LD_LIBRARY_PATH
 export PATH=$QTDIR/bin:$KDEDIR/bin:$PATH
 
 CFLAGS="%optflags" CXXFLAGS="%optflags" \
-	%configure  --disable-rpath \
+	%configure2_5x  --disable-rpath \
 %if "%{_lib}" != "lib"
 				--enable-libsuffix="%(A=%{_lib}; echo ${A/lib/})" \
 %endif

@@ -24,7 +24,7 @@ BuildRequires:		jpeg-devel
 BuildRequires:		png-devel
 BuildRequires:		kdebase-devel 
 Buildrequires:		arts-devel
-BuildRequires:		libMesaGLU-devel
+BuildRequires:		mesaglu-devel
 BuildRequires:		libxxf86dga-devel
 BuildRequires:		libxt-devel
 BuildRequires:		libxv-devel

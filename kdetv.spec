@@ -44,7 +44,7 @@ but it is is based on Qt and integrated in KDE.
 
 
 %package -n %{libname}
-Summary:		kdevideo libraries
+Summary:		Kdevideo libraries
 Group:			System/Libraries
 Epoch:			%{kdetv_epoch}
 License:		LGPLv2+
@@ -54,7 +54,7 @@ These libraries provide TV support to KDE.
 
 
 %package -n %{develname}
-Summary:		kdevideo libraries
+Summary:		Kdevideo libraries
 Group:			Development/KDE and Qt
 Epoch:			%{kdetv_epoch}
 License:		LGPLv2+

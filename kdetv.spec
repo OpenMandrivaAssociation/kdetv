@@ -12,6 +12,7 @@ Version: 		0.8.9
 Release: 		%mkrel 5
 Source: 		%{name}-%{version}.tar.bz2
 Group: 			Video
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
 URL: 			http://www.kde-apps.org/content/show.php?content=11602
 Patch1:			kdetv-0.8.4-lib64.patch

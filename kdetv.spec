@@ -9,7 +9,7 @@
 Summary: 		TV viewer for KDE
 Name: 			kdetv
 Version: 		0.8.9
-Release: 		%mkrel 5
+Release: 		%mkrel 6
 Source: 		%{name}-%{version}.tar.bz2
 Group: 			Video
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -30,9 +30,9 @@ BuildRequires:		libxxf86dga-devel
 BuildRequires:		libxt-devel
 BuildRequires:		libxv-devel
 BuildRequires:		desktop-file-utils
+BuildRequires:          zvbi-devel
 Requires: 		arts
-# (nl)  maybe it should be better to only require kdebase-common
-Requires:               kdebase
+Requires:               kdebase-progs
 Requires:		%{libname} = %{kdetv_epoch}:%{version}-%{release} 
 Obsoletes:		kwintv
 

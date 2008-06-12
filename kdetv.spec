@@ -125,18 +125,26 @@ desktop-file-install --vendor='' --delete-original \
 rm -rf %{buildroot}
 
 %post
+%if %mdkversion < 200900
 %{update_menus}
+%endif
 update-alternatives --install %{launchers}/kde.desktop tvtuner.kde.dynamic %{launchers}/%{name}.desktop 31
 update-alternatives --install %{launchers}/gnome.desktop tvtuner.gnome.dynamic %{launchers}/%{name}.desktop 29
+%if %mdkversion < 200900
 %{update_icon_cache hicolor}
+%endif
 
 %postun
+%if %mdkversion < 200900
 %clean_menus
+%endif
 if [ $1 = 0 ]; then
   update-alternatives --remove tvtuner.kde.dynamic %{launchers}/%{name}.desktop
   update-alternatives --remove tvtuner.gnome.dynamic %{launchers}/%{name}.desktop
 fi
+%if %mdkversion < 200900
 %{clean_icon_cache hicolor}
+%endif
 
 
 %if %mdkversion < 200900

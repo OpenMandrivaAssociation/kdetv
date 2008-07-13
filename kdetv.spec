@@ -18,13 +18,7 @@ URL: 			http://www.kde-apps.org/content/show.php?content=11602
 Patch1:			kdetv-0.8.4-lib64.patch
 Patch2:			kdetv-0.8.7-simd.patch
 Patch3:			kdetv-0.8.9-auto26.patch
-BuildRequires: 		kdelibs-devel
-BuildRequires:		qt3-devel
-BuildRequires:		arts
-BuildRequires:		jpeg-devel
-BuildRequires:		png-devel
-BuildRequires:		kdebase-devel 
-Buildrequires:		arts-devel
+BuildRequires:		kdebase3-devel 
 BuildRequires:		mesaglu-devel
 BuildRequires:		libxxf86dga-devel
 BuildRequires:		libxt-devel
@@ -76,27 +70,14 @@ rm -rf %{buildroot}
 
 %build
 make -f admin/Makefile.common
-export QTDIR=%{qt3dir}
-export KDEDIR=%{_prefix}
-export LD_LIBRARY_PATH=$QTDIR/%{_lib}:$KDEDIR/%{_lib}:$LD_LIBRARY_PATH
-export PATH=$QTDIR/bin:$KDEDIR/bin:$PATH
-
-CFLAGS="%optflags" CXXFLAGS="%optflags" \
-	%configure2_5x  --disable-rpath \
-%if "%{_lib}" != "lib"
-				--enable-libsuffix="%(A=%{_lib}; echo ${A/lib/})" \
-%endif
-%if %compile_enable_final
-				--enable-final \
-%endif
-        		--disable-debug 
-
+%configure_kde3
 %make
 
 %install
+rm -f %buildroot
 %makeinstall_std
 
-chmod 4755 %buildroot/%{_bindir}/kdetvv4lsetup
+chmod 4755 %buildroot/%{_kde3_bindir}/kdetvv4lsetup
 
 # Dynamic desktop support
 %define launchers /etc/dynamic/launchers/tvtuner
@@ -111,13 +92,13 @@ Icon=kdetv
 Type=Application
 EOF
 
-mkdir -p %{buildroot}%{_datadir}/applications/kde
+mkdir -p %{buildroot}%{_kde3_datadir}/applications/kde
 desktop-file-install --vendor='' --delete-original \
   --remove-key="Encoding" \
   --remove-category="Multimedia" \
   --remove-category="QT" \
   --add-category="Qt" \
-  --dir %{buildroot}%{_datadir}/applications/kde/ %{buildroot}%{_datadir}/applnk/Multimedia/kdetv.desktop
+  --dir %{buildroot}%{_kde3_datadir}/applications/kde/ %{buildroot}%{_kde3_datadir}/applnk/Multimedia/kdetv.desktop
 
 %find_lang %{name} --with-html
 
@@ -156,47 +137,23 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root)
-%{_bindir}/kdetv
-
-%{_bindir}/kdetvv4lsetup
-
-%dir %{_datadir}/apps/kdetv/
-%{_datadir}/apps/kdetv/tips
-
-%{_iconsdir}/hicolor/*/apps/kdetv.png
-
-%{_datadir}/apps/kdetv/*.rc
-
-%{_datadir}/applications/kde/%{name}.desktop
-
-%dir %{_datadir}/apps/kdetv/channels-dist/
-%{_datadir}/apps/kdetv/channels-dist/*.list
-%{_datadir}/apps/kdetv/channels-dist/*.map
-
-%{_datadir}/apps/profiles/kdetv.profile.xml
-
-%{_datadir}/services/kdetv/*.desktop
-
-%{_datadir}/servicetypes/kdetv/*.desktop   
-
-%{_datadir}/apps/kdetv/icons/hicolor/16x16/apps/*.png
-%{_datadir}/apps/kdetv/icons/hicolor/22x22/actions/*.png
-   
-%{_datadir}/apps/kdetv/icons/hicolor/22x22/apps/*.png
-%{_datadir}/apps/kdetv/icons/hicolor/32x32/apps/*.png
-
-
+%{_kde3_bindir}/kdetv
+%{_kde3_bindir}/kdetvv4lsetup
+%{_kde3_datadir}/apps/kdetv
+%{_kde3_iconsdir}/hicolor/*/apps/kdetv.png
+%{_kde3_datadir}/applications/kde/%{name}.desktop
+%{_kde3_datadir}/apps/profiles/kdetv.profile.xml
+%{_kde3_datadir}/services/kdetv/*.desktop
+%{_kde3_datadir}/servicetypes/kdetv/*.desktop   
 %config(noreplace) %{launchers}/%{name}.desktop
 
 %files -n %{libname}
 %defattr(-,root,root)
-%{_libdir}/kde3/*.la
-%{_libdir}/kde3/*.so
-
-%{_libdir}/*.la
-%{_libdir}/*.so.*
-
+%{_kde3_libdir}/kde3/*.la
+%{_kde3_libdir}/kde3/*.so
+%{_kde3_libdir}/*.so.*
 
 %files -n %{develname}
 %defattr(-,root,root)
-%{_libdir}/*.so
+%{_kde3_libdir}/*.so
+%{_kde3_libdir}/*.la

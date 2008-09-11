@@ -9,7 +9,7 @@
 Summary: 		TV viewer for KDE
 Name: 			kdetv
 Version: 		0.8.9
-Release: 		%mkrel 6
+Release: 		%mkrel 7
 Source: 		%{name}-%{version}.tar.bz2
 Group: 			Video
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -86,7 +86,7 @@ cat > %{buildroot}%{launchers}/%{name}.desktop << EOF
 [Desktop Entry]
 Name=KdeTv \$devicename
 Comment=Kdetv
-Exec=%{_bindir}/kdetv
+Exec=%{_kde3_bindir}/kdetv
 Terminal=false
 Icon=kdetv
 Type=Application

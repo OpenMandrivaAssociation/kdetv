@@ -37,6 +37,49 @@ It has more or less the same abilities as xawtv
 but it is is based on Qt and integrated in KDE.
 
 
+%post
+%if %mdkversion < 200900
+%{update_menus}
+%endif
+update-alternatives --install %{launchers}/kde.desktop tvtuner.kde.dynamic %{launchers}/%{name}.desktop 31
+update-alternatives --install %{launchers}/gnome.desktop tvtuner.gnome.dynamic %{launchers}/%{name}.desktop 29
+%if %mdkversion < 200900
+%{update_icon_cache hicolor}
+%endif
+
+%postun
+%if %mdkversion < 200900
+%clean_menus
+%endif
+if [ $1 = 0 ]; then
+  update-alternatives --remove tvtuner.kde.dynamic %{launchers}/%{name}.desktop
+  update-alternatives --remove tvtuner.gnome.dynamic %{launchers}/%{name}.desktop
+fi
+%if %mdkversion < 200900
+%{clean_icon_cache hicolor}
+%endif
+
+%if %mdkversion < 200900
+%post -n %{libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
+%postun -n %{libname} -p /sbin/ldconfig
+%endif
+
+%files -f %{name}.lang
+%defattr(-,root,root)
+%{_kde3_bindir}/kdetv
+%{_kde3_bindir}/kdetvv4lsetup
+%{_kde3_datadir}/apps/kdetv
+%{_kde3_iconsdir}/hicolor/*/apps/kdetv.png
+%{_kde3_datadir}/applications/kde/%{name}.desktop
+%{_kde3_datadir}/apps/profiles/kdetv.profile.xml
+%{_kde3_datadir}/services/kdetv/*.desktop
+%{_kde3_datadir}/servicetypes/kdetv/*.desktop
+%config(noreplace) %{launchers}/%{name}.desktop
+
+#--------------------------------------------------------------------
+
 %package -n %{libname}
 Summary:		Kdevideo libraries
 Group:			System/Libraries
@@ -46,6 +89,13 @@ License:		LGPLv2+
 %description -n %{libname}
 These libraries provide TV support to KDE.
 
+%files -n %{libname}
+%defattr(-,root,root)
+%{_kde3_libdir}/kde3/*.la
+%{_kde3_libdir}/kde3/*.so
+%{_kde3_libdir}/*.so.*
+
+#--------------------------------------------------------------------
 
 %package -n %{develname}
 Summary:		Kdevideo libraries
@@ -59,6 +109,12 @@ Obsoletes:		%{mklibname kdevideo 1 -d}
 These are the files needed to develop applications that use qtvision
 libraries.
 
+%files -n %{develname}
+%defattr(-,root,root)
+%{_kde3_libdir}/*.so
+%{_kde3_libdir}/*.la
+
+#--------------------------------------------------------------------
 
 %prep
 rm -rf %{buildroot}
@@ -104,56 +160,3 @@ desktop-file-install --vendor='' --delete-original \
 
 %clean
 rm -rf %{buildroot}
-
-%post
-%if %mdkversion < 200900
-%{update_menus}
-%endif
-update-alternatives --install %{launchers}/kde.desktop tvtuner.kde.dynamic %{launchers}/%{name}.desktop 31
-update-alternatives --install %{launchers}/gnome.desktop tvtuner.gnome.dynamic %{launchers}/%{name}.desktop 29
-%if %mdkversion < 200900
-%{update_icon_cache hicolor}
-%endif
-
-%postun
-%if %mdkversion < 200900
-%clean_menus
-%endif
-if [ $1 = 0 ]; then
-  update-alternatives --remove tvtuner.kde.dynamic %{launchers}/%{name}.desktop
-  update-alternatives --remove tvtuner.gnome.dynamic %{launchers}/%{name}.desktop
-fi
-%if %mdkversion < 200900
-%{clean_icon_cache hicolor}
-%endif
-
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%files -f %{name}.lang
-%defattr(-,root,root)
-%{_kde3_bindir}/kdetv
-%{_kde3_bindir}/kdetvv4lsetup
-%{_kde3_datadir}/apps/kdetv
-%{_kde3_iconsdir}/hicolor/*/apps/kdetv.png
-%{_kde3_datadir}/applications/kde/%{name}.desktop
-%{_kde3_datadir}/apps/profiles/kdetv.profile.xml
-%{_kde3_datadir}/services/kdetv/*.desktop
-%{_kde3_datadir}/servicetypes/kdetv/*.desktop   
-%config(noreplace) %{launchers}/%{name}.desktop
-
-%files -n %{libname}
-%defattr(-,root,root)
-%{_kde3_libdir}/kde3/*.la
-%{_kde3_libdir}/kde3/*.so
-%{_kde3_libdir}/*.so.*
-
-%files -n %{develname}
-%defattr(-,root,root)
-%{_kde3_libdir}/*.so
-%{_kde3_libdir}/*.la

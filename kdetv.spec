@@ -3,7 +3,7 @@
 %define develname	%mklibname kdevideo -d
 
 %define compile_enable_final 0
-
+%define launchers /etc/dynamic/launchers/tvtuner
 %define kdetv_epoch 1
 
 Summary: 		TV viewer for KDE
@@ -16,7 +16,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
 URL: 			http://www.kde-apps.org/content/show.php?content=11602
 Patch1:			kdetv-0.8.4-lib64.patch
-Patch2:			kdetv-0.8.7-simd.patch
+Patch2:			kdetv-0.8.9-simd.patch
 Patch3:			kdetv-0.8.9-auto26.patch
 BuildRequires:		kdebase3-devel 
 BuildRequires:		mesaglu-devel
@@ -59,13 +59,6 @@ fi
 %{clean_icon_cache hicolor}
 %endif
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files -f %{name}.lang
 %defattr(-,root,root)
 %{_kde3_bindir}/kdetv
@@ -95,6 +88,13 @@ These libraries provide TV support to KDE.
 %{_kde3_libdir}/kde3/*.so
 %{_kde3_libdir}/*.so.*
 
+%if %mdkversion < 200900
+%post -n %{libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
+%postun -n %{libname} -p /sbin/ldconfig
+%endif
+
 #--------------------------------------------------------------------
 
 %package -n %{develname}
@@ -117,8 +117,6 @@ libraries.
 #--------------------------------------------------------------------
 
 %prep
-rm -rf %{buildroot}
-
 %setup -q
 %patch1 -p1 -b .lib64
 %patch2 -p1 -b .simd-flags
@@ -130,13 +128,12 @@ make -f admin/Makefile.common
 %make
 
 %install
-rm -f %buildroot
+rm -fr %buildroot
 %makeinstall_std
 
 chmod 4755 %buildroot/%{_kde3_bindir}/kdetvv4lsetup
 
 # Dynamic desktop support
-%define launchers /etc/dynamic/launchers/tvtuner
 mkdir -p %{buildroot}%{launchers}
 cat > %{buildroot}%{launchers}/%{name}.desktop << EOF
 [Desktop Entry]

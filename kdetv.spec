@@ -6,28 +6,25 @@
 %define launchers /etc/dynamic/launchers/tvtuner
 %define kdetv_epoch 1
 
+%define svn     986125
+
 Summary: 		TV viewer for KDE
 Name: 			kdetv
-Version: 		0.8.9
-Release: 		%mkrel 7
-Source: 		%{name}-%{version}.tar.bz2
+Version: 		0.9.0
+Release: 		%mkrel 0.%svn.1
+Source: 		%{name}-%{version}.%svn.tar.bz2
 Group: 			Video
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
 URL: 			http://www.kde-apps.org/content/show.php?content=11602
-Patch1:			kdetv-0.8.4-lib64.patch
-Patch2:			kdetv-0.8.9-simd.patch
-Patch3:			kdetv-0.8.9-auto26.patch
-BuildRequires:		kdebase3-devel 
+BuildRequires:		kdebase4-devel 
 BuildRequires:		mesaglu-devel
 BuildRequires:		libxxf86dga-devel
 BuildRequires:		libxt-devel
 BuildRequires:		libxv-devel
 BuildRequires:		desktop-file-utils
 BuildRequires:          zvbi-devel
-Requires: 		arts
-Requires:               kdebase-progs
-Requires:		%{libname} = %{kdetv_epoch}:%{version}-%{release} 
+Requires:               kdebase4-runtime
 Obsoletes:		kwintv
 
 
@@ -38,38 +35,28 @@ but it is is based on Qt and integrated in KDE.
 
 
 %post
-%if %mdkversion < 200900
-%{update_menus}
-%endif
 update-alternatives --install %{launchers}/kde.desktop tvtuner.kde.dynamic %{launchers}/%{name}.desktop 31
 update-alternatives --install %{launchers}/gnome.desktop tvtuner.gnome.dynamic %{launchers}/%{name}.desktop 29
-%if %mdkversion < 200900
-%{update_icon_cache hicolor}
-%endif
 
 %postun
-%if %mdkversion < 200900
-%clean_menus
-%endif
 if [ $1 = 0 ]; then
   update-alternatives --remove tvtuner.kde.dynamic %{launchers}/%{name}.desktop
   update-alternatives --remove tvtuner.gnome.dynamic %{launchers}/%{name}.desktop
 fi
-%if %mdkversion < 200900
-%{clean_icon_cache hicolor}
-%endif
 
-%files -f %{name}.lang
+%files 
 %defattr(-,root,root)
-%{_kde3_bindir}/kdetv
-%{_kde3_bindir}/kdetvv4lsetup
-%{_kde3_datadir}/apps/kdetv
-%{_kde3_iconsdir}/hicolor/*/apps/kdetv.png
-%{_kde3_datadir}/applications/kde/%{name}.desktop
-%{_kde3_datadir}/apps/profiles/kdetv.profile.xml
-%{_kde3_datadir}/services/kdetv/*.desktop
-%{_kde3_datadir}/servicetypes/kdetv/*.desktop
+%{_kde_bindir}/kdetv
+%{_kde_bindir}/kdetvv4lsetup
+%{_kde_datadir}/apps/kdetv
+%{_kde_iconsdir}/hicolor/*/*/*.png
+%{_kde_datadir}/applications/kde4/%{name}.desktop
+%{_kde_datadir}/apps/profiles/kdetv.profile.xml
+%{_kde_datadir}/kde4/services/kdetv/*.desktop
+%{_kde_datadir}/kde4/servicetypes/kdetv/*.desktop
 %config(noreplace) %{launchers}/%{name}.desktop
+%{_kde_libdir}/kde4/kdetv_*
+%{_kde_libdir}/kde4/libzvbidecoder.so
 
 #--------------------------------------------------------------------
 
@@ -84,16 +71,7 @@ These libraries provide TV support to KDE.
 
 %files -n %{libname}
 %defattr(-,root,root)
-%{_kde3_libdir}/kde3/*.la
-%{_kde3_libdir}/kde3/*.so
-%{_kde3_libdir}/*.so.*
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
+%{_kde_libdir}/*.so.*
 
 #--------------------------------------------------------------------
 
@@ -111,27 +89,24 @@ libraries.
 
 %files -n %{develname}
 %defattr(-,root,root)
-%{_kde3_libdir}/*.so
-%{_kde3_libdir}/*.la
+%{_kde_libdir}/*.so
+%{_kde_libdir}/libkvideoio.a
 
 #--------------------------------------------------------------------
 
 %prep
-%setup -q
-%patch1 -p1 -b .lib64
-%patch2 -p1 -b .simd-flags
-%patch3 -p1 -b .auto26
+%setup -q -n %name
 
 %build
-make -f admin/Makefile.common
-%configure_kde3
+%cmake_kde4
 %make
 
 %install
+cd build
 rm -fr %buildroot
 %makeinstall_std
 
-chmod 4755 %buildroot/%{_kde3_bindir}/kdetvv4lsetup
+chmod 4755 %buildroot/%{_kde_bindir}/kdetvv4lsetup
 
 # Dynamic desktop support
 mkdir -p %{buildroot}%{launchers}
@@ -139,21 +114,11 @@ cat > %{buildroot}%{launchers}/%{name}.desktop << EOF
 [Desktop Entry]
 Name=KdeTv \$devicename
 Comment=Kdetv
-Exec=%{_kde3_bindir}/kdetv
+Exec=%{_kde_bindir}/kdetv
 Terminal=false
 Icon=kdetv
 Type=Application
 EOF
-
-mkdir -p %{buildroot}%{_kde3_datadir}/applications/kde
-desktop-file-install --vendor='' --delete-original \
-  --remove-key="Encoding" \
-  --remove-category="Multimedia" \
-  --remove-category="QT" \
-  --add-category="Qt" \
-  --dir %{buildroot}%{_kde3_datadir}/applications/kde/ %{buildroot}%{_kde3_datadir}/applnk/Multimedia/kdetv.desktop
-
-%find_lang %{name} --with-html
 
 %clean
 rm -rf %{buildroot}

@@ -4,7 +4,6 @@
 
 %define compile_enable_final 0
 %define launchers /etc/dynamic/launchers/tvtuner
-%define kdetv_epoch 1
 
 %define svn     986125
 
@@ -12,27 +11,26 @@ Summary: 		TV viewer for KDE
 Name: 			kdetv
 Version: 		0.9.0
 Release: 		%mkrel 0.%svn.1
+Epoch:          1
 Source: 		%{name}-%{version}.%svn.tar.bz2
 Group: 			Video
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
 URL: 			http://www.kde-apps.org/content/show.php?content=11602
-BuildRequires:		kdebase4-devel 
-BuildRequires:		mesaglu-devel
-BuildRequires:		libxxf86dga-devel
-BuildRequires:		libxt-devel
-BuildRequires:		libxv-devel
-BuildRequires:		desktop-file-utils
-BuildRequires:          zvbi-devel
-Requires:               kdebase4-runtime
+BuildRequires:	kdebase4-devel 
+BuildRequires:	mesaglu-devel
+BuildRequires:	libxxf86dga-devel
+BuildRequires:	libxt-devel
+BuildRequires:	libxv-devel
+BuildRequires:	desktop-file-utils
+BuildRequires:  zvbi-devel
+Requires:       kdebase4-runtime
 Obsoletes:		kwintv
-
 
 %description
 Kdetv allows you to watch TV in a window on your PC screen.
 It has more or less the same abilities as xawtv
 but it is is based on Qt and integrated in KDE.
-
 
 %post
 update-alternatives --install %{launchers}/kde.desktop tvtuner.kde.dynamic %{launchers}/%{name}.desktop 31
@@ -58,29 +56,47 @@ fi
 %{_kde_libdir}/kde4/kdetv_*
 %{_kde_libdir}/kde4/libzvbidecoder.so
 
-#--------------------------------------------------------------------
+#------------------------------------------------   
 
-%package -n %{libname}
-Summary:		Kdevideo libraries
-Group:			System/Libraries
-Epoch:			%{kdetv_epoch}
-License:		LGPLv2+
+%define kdetvvideo_major 1
+%define libkdetvvideo %mklibname kdetvvideo %kdetvvideo_major
 
-%description -n %{libname}
-These libraries provide TV support to KDE.
+%package -n %libkdetvvideo
+Summary: KDE 4 core library
+Group: System/Libraries
+Obsoletes: %{_lib}kdevideo1 < 1:0.9.0-0.986125.2
 
-%files -n %{libname}
+%description -n %libkdetvvideo
+KDE 4 core library.
+
+%files -n %libkdetvvideo
 %defattr(-,root,root)
-%{_kde_libdir}/*.so.*
+%_kde_libdir/libkdetvvideo.so.%{kdetvvideo_major}*
 
-#--------------------------------------------------------------------
+#------------------------------------------------   
+
+%define libkdetv_major 1
+%define liblibkdetv %mklibname libkdetv %libkdetv_major
+
+%package -n %liblibkdetv
+Summary: KDE 4 core library
+Group: System/Libraries
+
+%description -n %liblibkdetv
+KDE 4 core library.
+
+%files -n %liblibkdetv
+%defattr(-,root,root)
+%_kde_libdir/liblibkdetv.so.%{libkdetv_major}*
+
+#------------------------------------------------
 
 %package -n %{develname}
 Summary:		Kdevideo libraries
 Group:			Development/KDE and Qt
-Epoch:			%{kdetv_epoch}
 License:		LGPLv2+
-Requires:		%{libname} = %{kdetv_epoch}:%{version}-%{release}
+Requires:		%{libkdetvvideo} = %{epoch}:%{version}-%{release}
+Requires:       %{liblibkdetv} = %{epoch}:%{version}-%{release}
 Obsoletes:		%{mklibname kdevideo 1 -d}
 
 %description -n %{develname}
@@ -119,6 +135,11 @@ Terminal=false
 Icon=kdetv
 Type=Application
 EOF
+
+%check
+for f in %{buildroot}%{_kde_datadir}/applications/kde4/*.desktop ; do
+     desktop-file-validate $f
+done 
 
 %clean
 rm -rf %{buildroot}

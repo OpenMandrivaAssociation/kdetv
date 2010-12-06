@@ -10,7 +10,7 @@
 Summary: 		TV viewer for KDE
 Name: 			kdetv
 Version: 		0.9.0
-Release: 		%mkrel 0.%svn.1
+Release: 		%mkrel 0.%svn.2
 Epoch:          1
 Source: 		%{name}-%{version}.%svn.tar.bz2
 Group: 			Video

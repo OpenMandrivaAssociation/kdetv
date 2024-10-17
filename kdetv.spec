@@ -16,7 +16,7 @@ Source: 		%{name}-%{version}.%svn.tar.bz2
 Group: 			Video
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
-URL: 			http://www.kde-apps.org/content/show.php?content=11602
+URL: 			https://www.kde-apps.org/content/show.php?content=11602
 BuildRequires:	kdebase4-devel 
 BuildRequires:	mesaglu-devel
 BuildRequires:	libxxf86dga-devel

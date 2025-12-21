@@ -17,6 +17,7 @@ Group: 			Video
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: 		GPLv2+
 URL: 			https://www.kde-apps.org/content/show.php?content=11602
+BuildRequires:	make
 BuildRequires:	kdebase4-devel 
 BuildRequires:	mesaglu-devel
 BuildRequires:	libxxf86dga-devel
